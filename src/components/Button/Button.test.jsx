@@ -1,13 +1,21 @@
-// TODO: Verify that the button calls its click handler whenever clicked
-
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { render, screen } from "react-test-renderer";
+import renderer from "react-test-renderer";
 import Button from "./Button";
 
-it("calls the button handler when the button is clicked", () => {
+it("renders without crashing", () => {
+  const rendered = renderer
+    .create(<Button changeHandler={() => {}} txt="Click Me!" />)
+    .toJSON();
+  expect(rendered).toMatchSnapshot();
+});
+
+it("calls the change handler whenever the button is clicked", () => {
   const mockChangeHandler = jest.fn();
-  render(<Button />);
+
+  render(<Button changeHandler={mockChangeHandler} txt="" />);
 
   userEvent.click(screen.getByRole("button"));
+
   expect(mockChangeHandler).toHaveBeenCalled();
 });
